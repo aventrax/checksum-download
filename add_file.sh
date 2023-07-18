@@ -34,6 +34,7 @@ elif [[ "$f" =~ \.[zZ][iI][pP] ]]; then
   unzip -Z1 "$f"|while read fz; do
     sha1=$(unzip -p "$f" "$fz"|sha1sum|cut -d\  -f1)
     if [ $(sqlite3 $DATABASE "SELECT COUNT(*) FROM files WHERE checksum='$sha1'") -eq 0 ]; then
+      echo "Adding file: $fz (archive: $f)"
       sqlite3 $DATABASE "INSERT INTO files (checksum, path, archive, archive_type) VALUES ('$sha1', '$fz', '$f', 'zip');"
     fi
   done

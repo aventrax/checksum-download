@@ -2,15 +2,22 @@
 
 ## Scope
 
-This project is composed of two distinct elements; a bash script that populate
-a sqlite database with given files (adding checksum and other details), and a
-small Flask app that takes a checksum and return the corresponding file to the
-user if any matching file on the database is found.
+This project scans a folder for certain type of files, that takes their checksums
+and populate a sqlite database used by a Flask app to return files based on their
+checksums. The database is kept updated by a script using inotify-tools.
+
+There are three distinct elements:
+
+- A bash script that populate a sqlite database with given files
+- A small Flask app that takes a checksum and return the corresponding file
+- A script monitoring a folder updating the database if necessary
+
+Files into zip archives are managed.
 
 ## Requirements
 
-- sqlite3/unzip bash programs installed
-- Python 3.10 or better for Flask app
+- Python3 (better with a virtualenv)
+- sqlite3/unzip/inotify-tools packages installed
 
 ## Instructions
 
