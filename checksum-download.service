@@ -1,0 +1,11 @@
+[Unit]
+Description=Download files by their checksum
+After=network.target
+
+[Service]
+WorkingDirectory=%h/checksum-download
+ExecStart=/path/to/your/python app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
