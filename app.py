@@ -15,13 +15,15 @@ if not os.environ.get('DATABASE', None):
 app = Flask(__name__)
 
 
-@app.route(os.path.join(os.environ.get('VIRTUALDIRPATH', ''), '<checksum>'), methods=['GET'])
+@app.route(os.environ.get('VIRTUALDIRPATH', '') + '/<checksum>', methods=['GET'])
 def checksum_download(checksum):
     """
     Search for requested checksum and return matching file
     """
 
-    with sqlite3.connect(os.environ['DATABASE'], uri=True) as conn:
+    db_file = os.environ['DATABASE']
+
+    with sqlite3.connect("file:{}?mode=ro".format(db_file), uri=True) as conn:
         conn.row_factory = sqlite3.Row
         query = "SELECT * FROM files WHERE checksum='{}'".format(checksum)
         cur = conn.cursor()
