@@ -20,7 +20,7 @@ fi
 
 if [ ! -f $DATABASE ]; then
   echo "Database not found, creating an empty one"
-  sqlite3 $DATABASE "CREATE TABLE files (checksum TEXT NOT NULL UNIQUE, checksum_type TEXT NOT NULL DEFAULT 'SHA1', path TEXT NOT NULL, archive INTEGER DEFAULT NULL, archive_type INTEGER DEFAULT NULL, PRIMARY KEY(checksum));"
+  sqlite3 $DATABASE "CREATE TABLE files (checksum TEXT NOT NULL UNIQUE, checksum_type TEXT NOT NULL DEFAULT 'SHA1', path TEXT NOT NULL, archive TEXT DEFAULT NULL, archive_type TEXT DEFAULT NULL, PRIMARY KEY(checksum));"
 fi
 
 if [[ "$f" =~ \.[eE][xX][eE]$|\.[dD][lL][lL]$ ]]; then

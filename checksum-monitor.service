@@ -1,10 +1,10 @@
 [Unit]
-Description=Download files by their checksum
+Description=Monitor directories for changes
 After=network.target
 
 [Service]
 WorkingDirectory=%h/checksum-download
-ExecStart=/path/to/your/python app.py
+ExecStart=%h/monitor.sh
 Restart=on-failure
 
 [Install]

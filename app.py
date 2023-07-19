@@ -29,8 +29,9 @@ def checksum_download(checksum):
         cur = conn.cursor()
         cur.execute(query)
         row = cur.fetchone()
-        if not row:
-            return abort(404)
+
+    if not row:
+        return abort(404)
 
     checksum = row['checksum']
     checksum_type = row['checksum_type']
@@ -41,7 +42,7 @@ def checksum_download(checksum):
     if not archive and os.access(path, os.R_OK):
         return send_file(path, as_attachment=True, download_name=os.path.basename(path))
 
-    if archive_type == 'zip':
+    if archive_type == 'zip' and os.access(archive, os.R_OK):
         try:
             with ZipFile(archive, 'r') as zf:
                 return send_file(zf.open(path), as_attachment=True, download_name=os.path.basename(path))
