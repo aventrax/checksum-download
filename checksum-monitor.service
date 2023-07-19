@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 WorkingDirectory=%h/checksum-download
-ExecStart=%h/monitor.sh
+ExecStart=%h/checksum-download/monitor.sh
 Restart=on-failure
 
 [Install]
