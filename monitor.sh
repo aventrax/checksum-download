@@ -26,7 +26,7 @@ done
 
 inotifywait -q -mr --format '%e; %w%f' -e $MONITOR_EVENTS $MONITOR_DIRS|while read L; do
   e=$(echo $L|cut -d\; -f1)
-  f=$(echo $L|cut -d\; -f2-100)
+  f=$(echo $L|cut -d\; -f2-100|xargs)
   if [[ "$e" =~ MOVED_TO|CLOSE_WRITE ]]; then
     echo "Adding file: $f" && ./add_file.sh $f
   elif [[ "$e" =~ DELETE ]]; then
