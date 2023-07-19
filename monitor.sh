@@ -6,7 +6,10 @@ set -o allexport
 source .env
 set +o allexport
 
-if [[ -z "$MONITOR_DIRS"  ]]; then
+if [[ -z "$DATABASE" ]]; then
+  echo "Ensure DATABASE= is defined on .env file"
+  exit 1
+elif [[ -z "$MONITOR_DIRS"  ]]; then
   echo "Ensure MONITOR_DIRS= is defined on .env file"
   exit 1
 elif [[ -z "$MONITOR_EVENTS" ]]; then
@@ -27,7 +30,8 @@ inotifywait -q -mr --format '%e; %w%f' -e $MONITOR_EVENTS $MONITOR_DIRS|while re
   if [[ "$e" =~ MOVED_TO|CLOSE_WRITE ]]; then
     echo "Adding file: $f" && ./add_file.sh $f
   elif [[ "$e" =~ DELETE ]]; then
-    echo "Removing file: $f" && ./del_file.sh $f
+    echo "Removing file: $f"
+    sqlite3 $DATABASE "DELETE FROM files WHERE path='$f'"
   fi
 done
 
