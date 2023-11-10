@@ -30,7 +30,7 @@ if [[ "$f" =~ \.[eE][xX][eE]$|\.[dD][lL][lL]$ ]]; then
   sqlite3 $DATABASE "INSERT INTO files (checksum, path) VALUES ('$sha1', '$f');"
 
 # EXTRACT zip files (not including 7-Zip)
-elif [[ "$(file $f|cut -d\: -f2-100)" =~ \ [zZ][iI][pP] ]]; then
+elif [[ "$(file "$f"|cut -d\: -f2-100)" =~ \ [zZ][iI][pP] ]]; then
   unzip -Z1 "$f"|while read fz; do
 
     # ADDING .exe or .dll extensions ONLY
