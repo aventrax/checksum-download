@@ -23,14 +23,21 @@ if [ ! -f $DATABASE ]; then
   sqlite3 $DATABASE "CREATE TABLE files ('id'	INTEGER, checksum TEXT NOT NULL, checksum_type TEXT NOT NULL DEFAULT 'sha1', path TEXT NOT NULL, archive TEXT DEFAULT NULL, archive_type TEXT DEFAULT NULL, PRIMARY KEY('id' AUTOINCREMENT));"
 fi
 
-# ADDING .exe or .dll extensions ONLY
-if [[ "$f" =~ \.[eE][xX][eE]$|\.[dD][lL][lL]$ ]]; then
+# ADDING [exe/dll/rpm/deb] extensions ONLY
+if [[ "$f" =~ \.[eE][xX][eE]$|\.[dD][lL][lL]$|\.[dD][eE][bB]$|\.[rR][pP][mM]$ ]]; then
   sha1=$(sha1sum "$f"|cut -d\  -f1)
   echo "Adding file: $f"
   sqlite3 $DATABASE "INSERT INTO files (checksum, path) VALUES ('$sha1', '$f');"
 
-# EXTRACT zip files (not including 7-Zip)
+# ZIP files (not including 7-Zip)
 elif [[ "$(file "$f"|cut -d\: -f2-100)" =~ \ [zZ][iI][pP] ]]; then
+
+  # ADDING
+  sha1=$(sha1sum "$f"|cut -d\  -f1)
+  echo "Adding file: $f"
+  sqlite3 $DATABASE "INSERT INTO files (checksum, path) VALUES ('$sha1', '$f');"
+
+  # EXTRACTING
   unzip -Z1 "$f"|while read fz; do
 
     # ADDING .exe or .dll extensions ONLY
